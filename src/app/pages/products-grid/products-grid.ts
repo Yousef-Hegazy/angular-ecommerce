@@ -1,12 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, input, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 import { Product } from '../../models/product';
+import { CategoryChipComponent } from './components/category-chip.component';
+import { ProductCardComponent } from './components/product-card.component';
+import { ProductsCatalogHeaderComponent } from './components/products-catalog-header.component';
+import { ProductsEmptyStateComponent } from './components/products-empty-state.component';
+import { ProductsToolbarComponent } from './components/products-toolbar.component';
 import {
   ProductQuickViewDialog,
   QuickViewDialogResult,
@@ -23,12 +32,13 @@ export type SortOption =
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
     MatSnackBarModule,
     MatDialogModule,
+    CategoryChipComponent,
+    ProductCardComponent,
+    ProductsCatalogHeaderComponent,
+    ProductsToolbarComponent,
+    ProductsEmptyStateComponent,
   ],
   templateUrl: './products-grid.html',
   styleUrl: './products-grid.scss',
@@ -36,6 +46,7 @@ export type SortOption =
 export default class ProductsGrid {
   private readonly snackBar = inject(MatSnackBar);
   private readonly dialog = inject(MatDialog);
+  private readonly router = inject(Router);
 
   // Route category input binding
   category = input<string>('all');
@@ -59,10 +70,15 @@ export default class ProductsGrid {
   ];
 
   constructor() {
-    // Sync initial input route if provided
-    if (this.category() && this.category() !== 'all') {
-      this.selectedCategory.set(this.category().toLowerCase());
-    }
+    // Reactively sync route input param whenever it changes or resolves
+    effect(() => {
+      const catParam = this.category();
+      if (catParam && catParam !== 'all') {
+        this.selectedCategory.set(catParam.toLowerCase());
+      } else {
+        this.selectedCategory.set('all');
+      }
+    });
   }
 
   readonly products = signal<Product[]>([
@@ -244,6 +260,11 @@ export default class ProductsGrid {
 
   selectCategory(catId: string): void {
     this.selectedCategory.set(catId);
+    if (catId === 'all') {
+      this.router.navigate(['/products']);
+    } else {
+      this.router.navigate(['/products', catId]);
+    }
   }
 
   updateSearch(val: string): void {
@@ -254,6 +275,7 @@ export default class ProductsGrid {
     this.selectedCategory.set('all');
     this.searchQuery.set('');
     this.currentSort.set('featured');
+    this.router.navigate(['/products']);
   }
 
   openQuickView(product: Product, event?: Event): void {

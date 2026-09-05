@@ -1,52 +1,13 @@
 <div
   class="products-page-container px-4 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-[1200px] mx-auto space-y-10"
 >
-  <!-- =========================================================================
-       1. EDITORIAL HERO & CATALOG HEADER (HALLMARK S2 SECTION HEAD)
-       ========================================================================= -->
-  <section class="border-b border-border pb-8 sm:pb-10">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-      <div class="space-y-2 max-w-2xl">
-        <div
-          class="flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-accent font-semibold"
-        >
-          <span class="inline-block w-2 h-2 rounded-full bg-accent"></span>
-          <span>Curated Department</span>
-          <span class="text-ink-faint">/</span>
-          <span class="text-ink-muted">Autumn Archive</span>
-        </div>
+  <!-- 1. Editorial Hero & Catalog Header -->
+  <app-products-catalog-header
+    [activeCount]="filteredProducts().length"
+    [totalCount]="products().length"
+  />
 
-        <h1
-          class="font-display text-4xl sm:text-5xl lg:text-6xl text-ink font-normal tracking-tight leading-[1.05]"
-        >
-          The Considered Collection
-        </h1>
-
-        <p
-          class="text-sm sm:text-base text-ink-muted font-sans font-normal leading-relaxed pt-1"
-        >
-          Precision crafted objects, archival textiles, and tactile accessories
-          made in micro-batches with transparent provenance.
-        </p>
-      </div>
-
-      <!-- Inventory Metrics Bar (Honest Metrics) -->
-      <div
-        class="flex items-baseline gap-3 self-start md:self-end bg-surface px-4 py-2.5 rounded-sm border border-border text-xs font-mono"
-      >
-        <span class="text-ink-faint">Active Listings:</span>
-        <span class="text-ink font-semibold text-sm"
-          >{{ filteredProducts().length }}</span
-        >
-        <span class="text-ink-faint">of</span>
-        <span class="text-ink-muted">{{ products().length }} Items</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================================================================
-       2. CONTROLS TOOLBAR: CATEGORY PILLS, LIVE SEARCH & SORT SELECT
-       ========================================================================= -->
+  <!-- 2. Controls Toolbar: Category Pills, Live Search & Sort Select -->
   <section class="space-y-5">
     <!-- Category Filter Strip -->
     <div
@@ -55,270 +16,46 @@
       aria-label="Product categories"
     >
       @for (cat of categories; track cat.id) {
-      <button
-        type="button"
-        role="tab"
-        [attr.aria-selected]="selectedCategory() === cat.id"
-        (click)="selectCategory(cat.id)"
-        [class]="selectedCategory() === cat.id 
-            ? 'bg-ink text-paper border-ink shadow-subtle' 
-            : 'bg-surface-container text-ink hover:bg-surface-container-high border-border'"
-        class="px-4 py-2 rounded-full border text-xs font-medium font-sans flex items-center gap-1.5 transition-all cursor-pointer flex-shrink-0 focus-visible:outline-2 focus-visible:outline-accent"
-      >
-        @if (selectedCategory() === cat.id) {
-        <span class="material-symbols-outlined text-[14px]">check</span>
-        }
-        <span>{{ cat.label }}</span>
-      </button>
+        <app-category-chip
+          [id]="cat.id"
+          [label]="cat.label"
+          [isSelected]="selectedCategory() === cat.id"
+          (selected)="selectCategory($event)"
+        />
       }
     </div>
 
     <!-- Sub-toolbar: Inline Search & Sorting Control -->
-    <div
-      class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2"
-    >
-      <!-- Live Search Field -->
-      <div
-        class="flex items-center gap-2.5 h-[38px] px-3.5 bg-paper border border-border rounded-sm focus-within:border-accent focus-within:ring-1 focus-within:ring-accent transition-all shadow-subtle flex-1 max-w-md"
-      >
-        <span
-          class="material-symbols-outlined text-[18px] text-ink-faint flex-shrink-0"
-          >search</span
-        >
-        <input
-          type="text"
-          [value]="searchQuery()"
-          (input)="updateSearch($any($event.target).value)"
-          placeholder="Filter by name, material, or keyword..."
-          aria-label="Search current products"
-          class="w-full bg-transparent border-none outline-none p-0 text-xs text-ink placeholder:text-ink-faint leading-normal font-sans"
-        />
-        @if (searchQuery()) {
-        <button
-          type="button"
-          (click)="updateSearch('')"
-          class="text-ink-faint hover:text-ink transition-colors flex items-center p-0.5"
-          aria-label="Clear search"
-        >
-          <span class="material-symbols-outlined text-[16px]">close</span>
-        </button>
-        }
-      </div>
-
-      <!-- Sorting Selector -->
-      <div
-        class="flex items-center gap-2.5 self-end sm:self-auto flex-shrink-0"
-      >
-        <label
-          for="sort-select"
-          class="text-xs font-mono text-ink-muted uppercase tracking-wider hidden sm:inline"
-        >
-          Sort by:
-        </label>
-        <div class="relative h-[38px]">
-          <select
-            id="sort-select"
-            [value]="currentSort()"
-            (change)="currentSort.set($any($event.target).value)"
-            class="h-full pl-3 pr-8 text-xs bg-paper border border-border rounded-sm text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all cursor-pointer shadow-subtle appearance-none font-sans"
-          >
-            <option value="featured">Curated (Featured)</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="rating-desc">Highest Rated</option>
-          </select>
-          <span
-            class="material-symbols-outlined pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-ink-faint text-[16px]"
-          >
-            unfold_more
-          </span>
-        </div>
-      </div>
-    </div>
+    <app-products-toolbar
+      [searchQuery]="searchQuery()"
+      [currentSort]="currentSort()"
+      (searchChange)="updateSearch($event)"
+      (sortChange)="currentSort.set($event)"
+    />
   </section>
 
-  <!-- =========================================================================
-       3. RESPONSIVE PRODUCTS GRID (FLUID 1-4 COLUMNS)
-       ========================================================================= -->
+  <!-- 3. Responsive Products Grid & Empty State Fallback -->
   <section aria-label="Products catalog">
     @if (filteredProducts().length > 0) {
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-7"
-    >
-      @for (product of filteredProducts(); track product.id) {
-
-      <!-- ATELIER LUXURY PRODUCT CARD -->
-      <article
-        class="group bg-paper border border-border hover:border-border-strong rounded-sm overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-card focus-within:border-accent relative"
-      >
-        <!-- Visual Container with Image & Overlays -->
-        <div
-          class="relative aspect-[4/3] bg-surface-container overflow-hidden border-b border-border flex items-center justify-center"
-        >
-          <!-- Product Photography with Subtle Scale Hover -->
-          <img
-            [src]="product.imageUrl"
-            [alt]="product.name"
-            loading="lazy"
-            class="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
-          />
-
-          <!-- Top Left Category Eyebrow or Stock Status -->
-          <div class="absolute top-3 left-3 z-10 flex flex-col gap-1">
-            @if (!product.inStock) {
-            <span
-              class="px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-error text-paper font-semibold shadow-subtle"
-            >
-              Sold Out
-            </span>
-            } @else {
-            <span
-              class="px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-ink/80 backdrop-blur-sm text-paper font-semibold shadow-subtle"
-            >
-              {{ product.category }}
-            </span>
-            }
-          </div>
-
-          <!-- Top Right Wishlist Toggle Action -->
-          <button
-            type="button"
-            (click)="toggleWishlist(product, $event)"
-            [attr.aria-label]="isWishlisted(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'"
-            matTooltip="{{ isWishlisted(product.id) ? 'Remove from Wishlist' : 'Save to Wishlist' }}"
-            class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-paper/90 backdrop-blur-md border border-border flex items-center justify-center text-ink hover:text-accent hover:border-accent transition-all duration-200 shadow-subtle cursor-pointer focus-visible:outline-2 focus-visible:outline-accent"
-          >
-            <span
-              class="material-symbols-outlined text-[18px] transition-transform active:scale-125"
-              [class.text-accent]="isWishlisted(product.id)"
-              [style.font-variation-settings]="isWishlisted(product.id) ? `'FILL' 1, 'wght' 400` : `'FILL' 0, 'wght' 300`"
-            >
-              favorite
-            </span>
-          </button>
-
-          <!-- Quick View Floating Action (Luminous Hover Pill) -->
-          <div
-            class="absolute inset-x-0 bottom-3 px-4 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto"
-          >
-            <button
-              type="button"
-              (click)="openQuickView(product, $event)"
-              class="w-full py-2 px-3 rounded bg-paper/95 backdrop-blur-md text-ink text-xs font-medium border border-border hover:border-ink flex items-center justify-center gap-1.5 shadow-card transition-all cursor-pointer"
-            >
-              <span class="material-symbols-outlined text-[16px]"
-                >visibility</span
-              >
-              <span>Quick View</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Card Content Details -->
-        <div class="p-5 flex-1 flex flex-col justify-between">
-          <div>
-            <!-- Metadata Row: Category & Star Rating -->
-            <div
-              class="flex items-center justify-between text-xs font-mono text-ink-faint mb-1.5"
-            >
-              <span class="truncate">{{ product.category }}</span>
-              <div class="flex items-center gap-1 text-secondary font-semibold">
-                <span
-                  class="material-symbols-outlined text-[14px]"
-                  style="
-                    font-variation-settings:
-                      &quot;FILL&quot; 1,
-                      &quot;wght&quot; 400;
-                  "
-                  >star</span
-                >
-                <span>{{ product.rating }}</span>
-                <span class="text-ink-faint font-normal"
-                  >({{ product.reviewCount }})</span
-                >
-              </div>
-            </div>
-
-            <!-- Product Title (Strictly Roman Cormorant Garamond Heading) -->
-            <h2
-              class="font-display text-xl text-ink font-normal tracking-tight group-hover:text-accent transition-colors line-clamp-1"
-            >
-              {{ product.name }}
-            </h2>
-
-            <!-- Concise Description -->
-            <p
-              class="text-xs text-ink-muted line-clamp-2 mt-1.5 leading-relaxed font-sans"
-            >
-              {{ product.description }}
-            </p>
-          </div>
-
-          <!-- Price & Add To Bag Footer Action -->
-          <div
-            class="mt-6 pt-4 border-t border-border flex items-center justify-between gap-3"
-          >
-            <div class="flex flex-col">
-              <span class="text-[10px] font-mono uppercase text-ink-faint"
-                >Price</span
-              >
-              <span
-                class="text-lg font-display font-semibold text-ink leading-tight"
-              >
-                ${{ product.price.toFixed(2) }}
-              </span>
-            </div>
-
-            <button
-              mat-flat-button
-              [disabled]="!product.inStock"
-              class="btn-atelier-primary !text-xs !py-1.5 !px-3.5 !h-[36px]"
-              (click)="addToBag(product, $event)"
-              [attr.aria-label]="'Add ' + product.name + ' to Bag'"
-            >
-              <span class="material-symbols-outlined text-[16px]">
-                {{ product.inStock ? 'shopping_bag' : 'remove_shopping_cart' }}
-              </span>
-              <span>{{ product.inStock ? 'Add to Bag' : 'Sold Out' }}</span>
-            </button>
-          </div>
-        </div>
-      </article>
-      }
-    </div>
-    } @else {
-
-    <!-- ELEGANT EMPTY STATE -->
-    <div
-      class="bg-surface border border-border border-dashed rounded-md p-12 text-center max-w-lg mx-auto space-y-4 my-8"
-    >
       <div
-        class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center mx-auto text-ink-faint"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-7"
       >
-        <span class="material-symbols-outlined text-[24px]">inventory_2</span>
+        @for (product of filteredProducts(); track product.id) {
+          <app-product-card
+            [product]="product"
+            [isWishlisted]="isWishlisted(product.id)"
+            (addToBag)="addToBag($event)"
+            (toggleWishlist)="toggleWishlist($event)"
+            (quickView)="openQuickView($event)"
+          />
+        }
       </div>
-
-      <div class="space-y-1">
-        <h3 class="font-display text-2xl text-ink font-normal">
-          No Matching Objects Found
-        </h3>
-        <p class="text-xs text-ink-muted font-sans leading-relaxed">
-          No items match "{{ searchQuery() }}" in the current selection. Try
-          resetting your search query or selecting another department.
-        </p>
-      </div>
-
-      <div class="pt-2">
-        <button
-          mat-stroked-button
-          class="mat-mdc-outlined-button !text-xs"
-          (click)="resetFilters()"
-        >
-          <span class="material-symbols-outlined text-[16px]">refresh</span>
-          <span>Reset All Filters</span>
-        </button>
-      </div>
-    </div>
+    } @else {
+      <app-products-empty-state
+        [searchQuery]="searchQuery()"
+        (reset)="resetFilters()"
+      />
     }
   </section>
 </div>
+
