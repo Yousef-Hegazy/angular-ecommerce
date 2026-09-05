@@ -1,0 +1,7 @@
+{
+     "tailwindCSS.classFunctions": [
+        "template",
+        "templateUrl"
+    ],
+    "tailwindCSS.experimental.configFile": "src/app/style.scss"
+}

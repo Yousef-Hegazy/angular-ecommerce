@@ -1,0 +1,9 @@
+{
+  "scannedAt": "2026-09-04",
+  "genre": "editorial",
+  "theme": "Atelier",
+  "fontStack": "Cormorant Garamond (display), Plus Jakarta Sans (body), JetBrains Mono (tokens)",
+  "framework": "Angular 20 with Angular Material 20 and Tailwind CSS 4",
+  "motion": "motion-subtle",
+  "macrostructure": "Workbench / Design System Gallery"
+}

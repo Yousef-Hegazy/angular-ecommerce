@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Header } from './layout/header/header';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, Header],
   template: `
-    <h1>Welcome to {{title}}!</h1>
-
-    <router-outlet />
+    <app-header />
+    <main class="max-w-[1200px]! mx-auto">
+      <router-outlet />
+    </main>
   `,
-  styles: [],
 })
-export class App {
-  protected title = 'ng-ecommerce';
-}
+export class App {}

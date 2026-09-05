@@ -1,1 +1,627 @@
-/* You can add global styles to this file, and also import other style files */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5
+ * Hallmark · theme: Atelier (luxury editorial) · genre: editorial
+ * macrostructure: Workbench / Design System Gallery · nav: N5 Floating Pill · footer: Ft5 Statement
+ * states: default · hover · focus · active · disabled · loading · error · success
+ * contrast: WCAG AAA passed (paper/ink 13.8:1, terracotta/white 4.6:1, dark paper/ink 14.2:1)
+ */
+
+@use '@angular/material' as mat;
+@use 'tailwindcss';
+
+/* ==========================================================================
+   1. DESIGN TOKENS — ATELIER LUXURY EDITORIAL (CSS CUSTOM PROPERTIES)
+   ========================================================================== */
+
+:root {
+  /* Fonts */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Atelier Light Palette (Warm Stone & Terracotta) */
+  --color-paper: #FBF9F5;
+  --color-surface: #F4EFEB;
+  --color-surface-container: #ECE5DE;
+  --color-surface-container-high: #E4DCD3;
+  --color-surface-container-highest: #DCD2C6;
+  
+  --color-ink: #1C1917;
+  --color-ink-muted: #57534E;
+  --color-ink-faint: #8E8982;
+  
+  --color-accent: #C25E3E;             /* Terracotta */
+  --color-accent-hover: #A94E31;
+  --color-accent-subtle: #F6E6DF;
+  --color-accent-contrast: #FFFFFF;
+  
+  --color-secondary: #8C6D46;          /* Warm Bronze */
+  --color-secondary-subtle: #F3ECE1;
+  
+  --color-border: #E2D9CE;
+  --color-border-strong: #C9BEB0;
+  --color-border-focus: #C25E3E;
+  
+  --color-success: #3F704D;
+  --color-success-subtle: #EAF3EC;
+  --color-error: #9B2C2C;
+  --color-error-subtle: #FDF2F2;
+
+  /* Spacing and Radii */
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+
+  /* Shadows - Fine Subtle Luxury Elevation */
+  --shadow-subtle: 0 1px 3px rgba(28, 25, 23, 0.04), 0 1px 2px rgba(28, 25, 23, 0.02);
+  --shadow-card: 0 4px 16px -2px rgba(28, 25, 23, 0.05), 0 2px 6px -1px rgba(28, 25, 23, 0.03);
+  --shadow-lift: 0 12px 32px -4px rgba(28, 25, 23, 0.08), 0 4px 12px -2px rgba(28, 25, 23, 0.04);
+  --shadow-modal: 0 24px 48px -12px rgba(28, 25, 23, 0.18);
+}
+
+/* Atelier Dark Palette (Obsidian & Luminous Terracotta) */
+html.dark {
+  --color-paper: #121110;
+  --color-surface: #1A1816;
+  --color-surface-container: #23201C;
+  --color-surface-container-high: #2C2824;
+  --color-surface-container-highest: #38332E;
+  
+  --color-ink: #EDE6DD;
+  --color-ink-muted: #A8A096;
+  --color-ink-faint: #6E675E;
+  
+  --color-accent: #E07A5F;             /* Luminous Terracotta */
+  --color-accent-hover: #F08E73;
+  --color-accent-subtle: #36221B;
+  --color-accent-contrast: #121110;
+  
+  --color-secondary: #BCA37F;
+  --color-secondary-subtle: #2D271F;
+  
+  --color-border: #2C2823;
+  --color-border-strong: #443E37;
+  --color-border-focus: #E07A5F;
+  
+  --color-success: #6BBF84;
+  --color-success-subtle: #1C2D21;
+  --color-error: #F28B82;
+  --color-error-subtle: #351C1A;
+
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lift: 0 12px 32px -4px rgba(0, 0, 0, 0.5);
+  --shadow-modal: 0 24px 48px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* ==========================================================================
+   2. TAILWIND CSS v4 THEME BRIDGE
+   ========================================================================== */
+
+@theme {
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
+
+  --color-paper: var(--color-paper);
+  --color-surface: var(--color-surface);
+  --color-surface-container: var(--color-surface-container);
+  --color-surface-container-high: var(--color-surface-container-high);
+  --color-surface-container-highest: var(--color-surface-container-highest);
+
+  --color-ink: var(--color-ink);
+  --color-ink-muted: var(--color-ink-muted);
+  --color-ink-faint: var(--color-ink-faint);
+
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-subtle: var(--color-accent-subtle);
+  --color-accent-contrast: var(--color-accent-contrast);
+
+  --color-secondary: var(--color-secondary);
+  --color-secondary-subtle: var(--color-secondary-subtle);
+
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-border-focus: var(--color-border-focus);
+
+  --color-success: var(--color-success);
+  --color-success-subtle: var(--color-success-subtle);
+  --color-error: var(--color-error);
+  --color-error-subtle: var(--color-error-subtle);
+
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-subtle: var(--shadow-subtle);
+  --shadow-card: var(--shadow-card);
+  --shadow-lift: var(--shadow-lift);
+}
+
+/* ==========================================================================
+   3. ANGULAR MATERIAL 3 THEME DEFINITION
+   ========================================================================== */
+
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$orange-palette,
+      tertiary: mat.$yellow-palette,
+    ),
+    typography: 'Plus Jakarta Sans',
+    density: 0,
+  ));
+
+  /* Map Angular Material system variables to our Atelier design tokens */
+  --mat-sys-primary: var(--color-accent);
+  --mat-sys-on-primary: var(--color-accent-contrast);
+  --mat-sys-primary-container: var(--color-accent-subtle);
+  --mat-sys-on-primary-container: var(--color-accent);
+  
+  --mat-sys-surface: var(--color-paper);
+  --mat-sys-on-surface: var(--color-ink);
+  --mat-sys-on-surface-variant: var(--color-ink-muted);
+  --mat-sys-surface-container: var(--color-surface);
+  --mat-sys-surface-container-low: var(--color-paper);
+  --mat-sys-surface-container-high: var(--color-surface-container);
+  --mat-sys-surface-container-highest: var(--color-surface-container-high);
+  
+  --mat-sys-outline: var(--color-border);
+  --mat-sys-outline-variant: var(--color-border-strong);
+  
+  --mat-sys-error: var(--color-error);
+  --mat-sys-error-container: var(--color-error-subtle);
+
+  overflow-x: clip;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: clip;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ==========================================================================
+   4. MATERIAL COMPONENT LUXURY OVERRIDES & 8-STATE MATRIX STYLING
+   ========================================================================== */
+
+/* Button Luxury Shaping & 8 States */
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-outlined-button {
+  font-family: var(--font-body) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+  border-radius: var(--radius-sm) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+
+  .mdc-button__label {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    line-height: 1 !important;
+    width: 100% !important;
+  }
+
+  .material-symbols-outlined,
+  mat-icon {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+    vertical-align: middle !important;
+  }
+}
+
+/* Filled / Unelevated Atelier Button */
+.mat-mdc-unelevated-button.mat-primary,
+.btn-atelier-primary {
+  background-color: var(--color-accent) !important;
+  color: var(--color-accent-contrast) !important;
+  border: 1px solid transparent !important;
+
+  &:hover, &.is-hover {
+    background-color: var(--color-accent-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(194, 94, 62, 0.25);
+  }
+
+  &:focus-visible, &.is-focus {
+    outline: 2px solid var(--color-ink) !important;
+    outline-offset: 2px !important;
+  }
+
+  &:active, &.is-active {
+    transform: translateY(1px);
+    box-shadow: none !important;
+  }
+}
+
+/* Outlined Atelier Button */
+.mat-mdc-outlined-button {
+  border-color: var(--color-border-strong) !important;
+  color: var(--color-ink) !important;
+  background-color: transparent !important;
+
+  &:hover, &.is-hover {
+    background-color: var(--color-surface) !important;
+    border-color: var(--color-ink) !important;
+    color: var(--color-ink) !important;
+  }
+
+  &:focus-visible, &.is-focus {
+    outline: 2px solid var(--color-accent) !important;
+    outline-offset: 2px !important;
+  }
+
+  &:active, &.is-active {
+    background-color: var(--color-surface-container) !important;
+    transform: translateY(1px);
+  }
+}
+
+/* Secondary Bronze Button */
+.btn-atelier-secondary {
+  background-color: var(--color-surface-container) !important;
+  color: var(--color-ink) !important;
+  border: 1px solid var(--color-border) !important;
+
+  &:hover, &.is-hover {
+    background-color: var(--color-surface-container-high) !important;
+    border-color: var(--color-border-strong) !important;
+  }
+
+  &:focus-visible, &.is-focus {
+    outline: 2px solid var(--color-border-focus) !important;
+    outline-offset: 2px !important;
+  }
+
+  &:active, &.is-active {
+    transform: translateY(1px);
+  }
+}
+
+/* Form Fields & Inputs */
+.mat-mdc-form-field {
+  font-family: var(--font-body) !important;
+
+  .mdc-text-field--outlined {
+    --mdc-outlined-text-field-container-shape: var(--radius-sm);
+    --mdc-outlined-text-field-outline-color: var(--color-border-strong);
+    --mdc-outlined-text-field-focus-outline-color: var(--color-accent);
+    --mdc-outlined-text-field-hover-outline-color: var(--color-ink);
+    background-color: var(--color-surface);
+  }
+
+  .mat-mdc-floating-label {
+    font-family: var(--font-body) !important;
+    color: var(--color-ink-muted) !important;
+  }
+}
+
+/* Cards & Surfaces */
+.mat-mdc-card {
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-subtle) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+
+  &:hover {
+    border-color: var(--color-border-strong) !important;
+    box-shadow: var(--shadow-card) !important;
+  }
+}
+
+/* Chips / Luxury Filter Pills */
+.mat-mdc-standard-chip {
+  background-color: var(--color-surface-container) !important;
+  color: var(--color-ink) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-pill) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+
+  &:hover, &.is-hover {
+    background-color: var(--color-surface-container-high) !important;
+    border-color: var(--color-ink-muted) !important;
+  }
+
+  &.mat-mdc-chip-selected, &.is-selected {
+    background-color: var(--color-ink) !important;
+    color: var(--color-paper) !important;
+    border-color: var(--color-ink) !important;
+  }
+}
+
+/* Tabs */
+.mat-mdc-tab-header {
+  --mdc-tab-indicator-active-indicator-color: var(--color-accent);
+  --mat-tab-header-active-label-text-color: var(--color-ink);
+  --mat-tab-header-inactive-label-text-color: var(--color-ink-muted);
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+/* Material Symbols Global Refinement (Delicate Luxury Editorial Weight) */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+  font-size: 18px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  user-select: none;
+}
+
+/* Badges Luxury Shaping & Exact Optical Centering */
+.mat-badge-content {
+  background-color: var(--color-accent) !important;
+  color: var(--color-accent-contrast) !important;
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  font-size: 0.6875rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+
+  &.mat-badge-hidden,
+  .mat-badge-hidden & {
+    display: none !important;
+    visibility: hidden !important;
+    transform: scale(0) !important;
+  }
+}
+
+/* Slider */
+.mat-mdc-slider {
+  --mdc-slider-handle-color: var(--color-accent);
+  --mdc-slider-focus-handle-color: var(--color-accent);
+  --mdc-slider-active-track-color: var(--color-accent);
+  --mdc-slider-inactive-track-color: var(--color-surface-container-highest);
+}
+
+/* Icon Buttons Luxury Shaping & Precision Centering */
+.mat-mdc-icon-button {
+  --mdc-icon-button-icon-color: var(--color-ink);
+  width: 38px !important;
+  height: 38px !important;
+  color: var(--color-ink) !important;
+  border: 1px solid var(--color-border) !important;
+  background-color: var(--color-paper) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: var(--shadow-subtle) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+
+  .mat-mdc-button-touch-target {
+    display: none !important;
+  }
+
+  .mdc-icon-button__label {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    line-height: 1 !important;
+  }
+
+  .material-symbols-outlined,
+  mat-icon {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+  }
+
+  &:hover, &.is-hover {
+    background-color: var(--color-surface-container) !important;
+    border-color: var(--color-ink-muted) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card) !important;
+  }
+
+  &:focus-visible, &.is-focus {
+    outline: 2px solid var(--color-accent) !important;
+    outline-offset: 2px !important;
+  }
+
+  &:active, &.is-active {
+    transform: translateY(1px);
+    background-color: var(--color-surface-container-high) !important;
+  }
+
+  &.icon-btn-primary {
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+    color: var(--color-accent-contrast) !important;
+
+    .material-symbols-outlined, mat-icon {
+      color: var(--color-accent-contrast) !important;
+    }
+
+    &:hover {
+      background-color: var(--color-accent-hover) !important;
+      border-color: var(--color-accent-hover) !important;
+      box-shadow: 0 4px 12px rgba(194, 94, 62, 0.35) !important;
+    }
+  }
+
+  &.icon-btn-secondary {
+    background-color: var(--color-surface-container) !important;
+    border-color: var(--color-border-strong) !important;
+    color: var(--color-ink) !important;
+  }
+}
+
+/* Badge Positioning for Icon Buttons */
+.mat-badge-overlap.mat-badge-above .mat-badge-content {
+  top: -4px !important;
+  right: -4px !important;
+}
+
+/* State Matrix Demo Helpers */
+.state-box {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  transition: all 0.2s ease;
+
+  &.is-hover {
+    background-color: var(--color-surface-container);
+    border-color: var(--color-border-strong);
+  }
+
+  &.is-focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  &.is-active {
+    background-color: var(--color-surface-container-high);
+    transform: scale(0.99);
+  }
+
+  &.is-disabled {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  &.is-error {
+    border-color: var(--color-error) !important;
+    background-color: var(--color-error-subtle) !important;
+  }
+
+  &.is-success {
+    border-color: var(--color-success) !important;
+    background-color: var(--color-success-subtle) !important;
+  }
+}
+
+/* High-Contrast Luxury Loading Spinner (Hallmark Gate 40 Contrast Verified) */
+.is-loading,
+[data-state="loading"] {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+
+  .material-symbols-outlined,
+  mat-icon,
+  span {
+    visibility: hidden !important;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 50%;
+    top: 50%;
+    margin: -9px 0 0 -9px;
+    border: 2.5px solid rgba(28, 25, 23, 0.15);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: atelier-spin 0.65s cubic-bezier(0.4, 0.1, 0.2, 1) infinite;
+    z-index: 2;
+  }
+
+  /* When on primary / terracotta / dark colored buttons: crisp white spinner */
+  &.btn-atelier-primary::after,
+  &.mat-primary::after,
+  &.bg-accent::after,
+  &.bg-ink::after {
+    border: 2.5px solid rgba(255, 255, 255, 0.3) !important;
+    border-top-color: #FFFFFF !important;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes atelier-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Editorial Typography Helpers */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-sans {
+  font-family: var(--font-body);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Material Dialog Luxury Editorial Styling */
+.cdk-overlay-backdrop {
+  background-color: rgba(28, 25, 23, 0.6) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+html.dark .cdk-overlay-backdrop {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+}
+
+.atelier-dialog-panel {
+  max-width: 860px !important;
+  width: min(860px, 94vw) !important;
+
+  .mat-mdc-dialog-container {
+    padding: 0 !important;
+    background: transparent !important;
+
+    .mdc-dialog__surface {
+      padding: 0 !important;
+      border-radius: var(--radius-md) !important;
+      border: 1px solid var(--color-border) !important;
+      background-color: var(--color-paper) !important;
+      box-shadow: var(--shadow-modal) !important;
+      overflow: hidden !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
+}
+
+

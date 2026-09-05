@@ -1,0 +1,118 @@
+<header
+  class="sticky top-0 z-50 backdrop-blur-md bg-paper/85 border-b border-border transition-colors duration-200"
+>
+  <mat-toolbar
+    class="!bg-transparent !px-4 sm:!px-6 !h-20 w-full justify-between max-w-[1200px]! mx-auto! flex items-center gap-4"
+  >
+    <!-- Brand Identity -->
+    <a
+      routerLink="/products"
+      class="group flex items-center gap-3 no-underline outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm flex-shrink-0"
+    >
+      <span
+        class="w-8 h-8 rounded-sm bg-accent text-accent-contrast flex items-center justify-center font-serif text-lg font-semibold shadow-subtle group-hover:bg-accent-hover transition-colors"
+      >
+        A
+      </span>
+      <div class="flex flex-col">
+        <span
+          class="font-serif text-2xl tracking-tight text-ink font-semibold group-hover:text-accent transition-colors leading-none"
+        >
+          Atelier
+        </span>
+        <span
+          class="text-[10px] font-mono tracking-widest uppercase text-ink-faint mt-0.5"
+        >
+          Luxury E-Commerce
+        </span>
+      </div>
+    </a>
+
+    <!-- Center Search Bar -->
+    <div
+      class="hidden md:flex items-center gap-2.5 h-[38px] px-3.5 bg-paper border border-border rounded-full focus-within:border-accent focus-within:ring-1 focus-within:ring-accent transition-all shadow-subtle flex-1 max-w-xs lg:max-w-sm mx-4"
+    >
+      <span
+        class="material-symbols-outlined text-[18px] text-ink-faint flex-shrink-0"
+        >search</span
+      >
+      <input
+        type="text"
+        placeholder="Search collections..."
+        class="w-full bg-transparent border-none outline-none p-0 text-xs text-ink placeholder:text-ink-faint leading-normal font-sans"
+      />
+    </div>
+
+    <!-- Right Controls: Utility Badges, Theme Switcher & Auth Actions -->
+    <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+      <!-- Wishlist Action with Dynamic Badge (hidden when count <= 0) -->
+      <button
+        mat-icon-button
+        routerLink="/my-wishlist"
+        [matBadge]="wishlistCount()"
+        [matBadgeHidden]="wishlistCount() <= 0"
+        matBadgeColor="primary"
+        matBadgePosition="above after"
+        matTooltip="View Wishlist"
+        aria-label="View curated wishlist"
+      >
+        <span class="material-symbols-outlined">favorite</span>
+      </button>
+
+      <!-- Cart Action with Dynamic Badge (hidden when count <= 0) -->
+      <button
+        mat-icon-button
+        routerLink="/my-cart"
+        [matBadge]="cartCount()"
+        [matBadgeHidden]="cartCount() <= 0"
+        matBadgeColor="primary"
+        matBadgePosition="above after"
+        matTooltip="Shopping Bag"
+        aria-label="View shopping bag"
+      >
+        <span class="material-symbols-outlined">shopping_bag</span>
+      </button>
+
+      <!-- Theme Switcher -->
+      <button
+        type="button"
+        mat-icon-button
+        (click)="themeService.toggleMode()"
+        matTooltip="{{ themeService.mode() === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode' }}"
+        [attr.aria-label]="
+          themeService.mode() === 'dark'
+            ? 'Switch to Light Mode'
+            : 'Switch to Dark Mode'
+        "
+      >
+        <span class="material-symbols-outlined text-[18px]">
+          {{ themeService.mode() === 'dark' ? 'light_mode' : 'dark_mode' }}
+        </span>
+      </button>
+
+      <!-- Divider -->
+      <div class="h-5 w-px bg-border mx-1 hidden sm:block"></div>
+
+      <!-- Auth Actions: Sign In & Sign Up -->
+      <div class="flex items-center gap-2">
+        <button
+          mat-stroked-button
+          class="mat-mdc-outlined-button !text-xs !py-1.5 !px-3.5 !h-[38px]"
+          aria-label="Sign In to your account"
+        >
+          <span class="material-symbols-outlined text-[18px]">login</span>
+          <span>Sign In</span>
+        </button>
+
+        <button
+          mat-flat-button
+          class="btn-atelier-primary !text-xs !py-1.5 !px-4 !h-[38px]"
+          aria-label="Create a new account"
+        >
+          <span class="material-symbols-outlined text-[18px]">person_add</span>
+          <span>Sign Up</span>
+        </button>
+      </div>
+    </div>
+  </mat-toolbar>
+</header>

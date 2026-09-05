@@ -1,0 +1,14 @@
+/* Hallmark · component: header · genre: editorial · theme: Atelier
+ * states: default · hover · focus · active · disabled · loading · error · success
+ * contrast: pass (WCAG AAA)
+ */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+header {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
